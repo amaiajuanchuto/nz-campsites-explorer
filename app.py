@@ -75,6 +75,36 @@ color_by = st.selectbox(
     width=300,
 )
 
+
+def generate_insight(df, group_by):
+    """Generate a short text insight based on the current grouping."""
+    counts = df[group_by].value_counts()
+    top_label = counts.index[0]
+    top_count = counts.iloc[0]
+    pct = round((top_count / len(df)) * 100, 1)
+
+    if group_by == "Campsite category":
+        return (
+            f"**{top_label}** is the most common type, making up **{pct}%** "
+            f"of all campsites ({top_count} of {len(df)}). This reflects how "
+            f"DOC prioritises accessible, low-cost camping over premium serviced sites."
+        )
+    elif group_by == "Region":
+        return (
+            f"**{top_label}** has the most DOC campsites of any region, with "
+            f"**{top_count}** sites — {pct}% of the national total. This likely "
+            f"reflects both land availability and visitor demand in the area."
+        )
+    elif group_by == "Primary activity":
+        return (
+            f"**{top_label}** is the most commonly listed primary activity, "
+            f"appearing at **{top_count}** campsites ({pct}% of sites with "
+            f"listed activities). Note: many sites offer multiple activities — "
+            f"this shows only the first one listed in the dataset."
+        )
+    return ""
+
+
 map_col, legend_col = st.columns([5, 1])
 
 with map_col:
@@ -129,4 +159,5 @@ with legend_col:
             f"</div>",
             unsafe_allow_html=True,
         )
-st.divider()
+
+st.info(generate_insight(df, color_by), icon="💡")
