@@ -1,0 +1,52 @@
+[project]
+name = "nz-campsites-explorer"
+version = "0.1.0"
+description = "First project for NZ portafolio"
+authors = [
+    {name = "Amaia Juanchuto"}
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pandas (>=3.0.3,<4.0.0)",
+    "plotly (>=6.8.0,<7.0.0)",
+    "streamlit (>=1.58.0,<2.0.0)",
+    "pyproj (>=3.7.2,<4.0.0)"
+]
+
+[tool.poetry]
+name = "nz-campsites-explorer"
+package-mode = false
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.1.0,<10.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "ruff (>=0.15.17,<0.16.0)",
+    "black (>=26.5.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)",
+    "watchdog (>=6.0.0,<7.0.0)"
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=. --cov-report=term-missing --no-cov-on-fail"
