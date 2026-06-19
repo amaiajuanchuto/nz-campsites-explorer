@@ -120,7 +120,7 @@ def generate_insight(df, group_by):
 map_col, legend_col = st.columns([5, 1])
 
 with map_col:
-    fig_map = px.scatter_mapbox(
+    fig_map = px.scatter_map(
         df,
         lat="lat",
         lon="lon",
@@ -142,12 +142,12 @@ with map_col:
     )
 
     fig_map.update_layout(
-        mapbox_style="open-street-map",
+        map_style="open-street-map",
         margin={"r": 0, "t": 10, "l": 0, "b": 0},
         showlegend=False,  # we hide the built-in legend, we'll build our own
     )
 
-    st.plotly_chart(fig_map, use_container_width=True)
+    st.plotly_chart(fig_map)
 
 with legend_col:
     st.markdown(f"**{color_by}**")
