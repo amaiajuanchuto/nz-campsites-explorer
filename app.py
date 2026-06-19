@@ -33,6 +33,11 @@ def load_data():
         lambda x: x.split(",")[0].strip() if x != "Not specified" else "Not specified"
     )
 
+    # Extract primary landscape type for colour grouping (first listed type)
+    df["Primary landscape"] = df["Landscape type"].apply(
+        lambda x: x.split(",")[0].strip() if x != "Unknown" else "Unknown"
+    )
+
     return df
 
 
@@ -70,7 +75,7 @@ st.subheader("🗺️ Campsite Locations Across New Zealand")
 # ── Map filter ───────────────────────────────────────
 color_by = st.selectbox(
     "Group map by:",
-    options=["Campsite category", "Region", "Primary activity"],
+    options=["Campsite category", "Region", "Primary activity", "Primary landscape"],
     index=0,
     width=300,
 )
@@ -101,6 +106,13 @@ def generate_insight(df, group_by):
             f"appearing at **{top_count}** campsites ({pct}% of sites with "
             f"listed activities). Note: many sites offer multiple activities — "
             f"this shows only the first one listed in the dataset."
+        )
+    elif group_by == "Primary landscape":
+        return (
+            f"**{top_label}** is the most common landscape type, found at "
+            f"**{top_count}** campsites ({pct}% of sites). New Zealand's DOC "
+            f"network is shaped heavily by its coastline and river systems, "
+            f"which this distribution reflects."
         )
     return ""
 
