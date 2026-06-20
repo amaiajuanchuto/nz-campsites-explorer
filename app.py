@@ -1,7 +1,7 @@
-import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from src.data_loader import load_and_clean_campsites
 from src.insights import generate_insight
 
 # ── Page config ──────────────────────────────────────────
@@ -15,32 +15,7 @@ st.set_page_config(
 # ── Load data ────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/campsites.csv")
-    # Clean column names
-    df.columns = df.columns.str.strip()
-    # Drop the Free column (entirely null)
-    df = df.drop(columns=["Free"], errors="ignore")
-    # Fill nulls in key columns
-    df["Landscape type"] = df["Landscape type"].fillna("Unknown")
-    df["Activities"] = df["Activities"].fillna("Not specified")
-    df["Dogs alllowed"] = df["Dogs alllowed"].fillna("Unknown")
-    # Convert NZTM2000 coordinates to lat/lon
-    from pyproj import Transformer
-
-    transformer = Transformer.from_crs("EPSG:2193", "EPSG:4326", always_xy=True)
-    df["lon"], df["lat"] = transformer.transform(df["x2"].values, df["y2"].values)
-
-    # Extract primary activity for colour grouping (first listed activity)
-    df["Primary activity"] = df["Activities"].apply(
-        lambda x: x.split(",")[0].strip() if x != "Not specified" else "Not specified"
-    )
-
-    # Extract primary landscape type for colour grouping (first listed type)
-    df["Primary landscape"] = df["Landscape type"].apply(
-        lambda x: x.split(",")[0].strip() if x != "Unknown" else "Unknown"
-    )
-
-    return df
+    return load_and_clean_campsites()
 
 
 df = load_data()
