@@ -131,10 +131,13 @@ with legend_col:
             color = "#999999"
 
         st.markdown(
-            f"<div style='display:flex;align-items:center;margin-bottom:6px;'>"
-            f"<div style='width:14px;height:14px;background-color:{color};border-radius:50%;margin-right:8px;'></div>"
-            f"<span style='font-size:13px;'>{label} ({count})</span>"
-            f"</div>",
+            (
+                f"<div style='display:flex;align-items:center;margin-bottom:6px;'>"
+                f"<div style='width:14px;height:14px;background-color:{color};"
+                f"border-radius:50%;margin-right:8px;'></div>"
+                f"<span style='font-size:13px;'>{label} ({count})</span>"
+                f"</div>"
+            ),
             unsafe_allow_html=True,
         )
 
