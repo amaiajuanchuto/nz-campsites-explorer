@@ -25,6 +25,8 @@ INSIGHT_TEMPLATES = {
     ),
 }
 
+EXCLUDED_LABELS = {"Not specified", "Unknown"}
+
 
 def generate_insight(df, group_by):
     """Generate a short text insight based on the current grouping."""
@@ -32,6 +34,12 @@ def generate_insight(df, group_by):
         return ""
 
     counts = df[group_by].value_counts()
+    # Exclude placeholder labels so the insight reflects real data, not gaps
+    counts = counts[~counts.index.isin(EXCLUDED_LABELS)]
+
+    if counts.empty:
+        return "Not enough labelled data available for this grouping yet..."
+
     top_label = counts.index[0]
     top_count = counts.iloc[0]
     pct = round((top_count / len(df)) * 100, 1)
