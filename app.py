@@ -50,6 +50,30 @@ CATEGORY_COLORS = {
     "Backcountry": "#d4a373",
     "Serviced": "#185FA5",
 }
+INSIGHT_TEMPLATES = {
+    "Campsite category": (
+        "**{label}** is the most common type, making up **{pct}%** "
+        "of all campsites ({count} of {total}). This reflects how "
+        "DOC prioritises accessible, low-cost camping over premium serviced sites."
+    ),
+    "Region": (
+        "**{label}** has the most DOC campsites of any region, with "
+        "**{count}** sites — {pct}% of the national total. This likely "
+        "reflects both land availability and visitor demand in the area."
+    ),
+    "Primary activity": (
+        "**{label}** is the most commonly listed primary activity, "
+        "appearing at **{count}** campsites ({pct}% of sites with "
+        "listed activities). Note: many sites offer multiple activities — "
+        "this shows only the first one listed in the dataset."
+    ),
+    "Primary landscape": (
+        "**{label}** is the most common landscape type, found at "
+        "**{count}** campsites ({pct}% of sites with listed landscapes). "
+        "Note: many sites span multiple landscape types — this shows only "
+        "the first one listed in the dataset."
+    ),
+}
 
 # ── Header ───────────────────────────────────────────────
 st.title("🏕️ NZ DOC Campsites Explorer")
@@ -83,38 +107,17 @@ color_by = st.selectbox(
 
 def generate_insight(df, group_by):
     """Generate a short text insight based on the current grouping."""
+    if group_by not in INSIGHT_TEMPLATES:
+        return ""
+
     counts = df[group_by].value_counts()
     top_label = counts.index[0]
     top_count = counts.iloc[0]
     pct = round((top_count / len(df)) * 100, 1)
 
-    if group_by == "Campsite category":
-        return (
-            f"**{top_label}** is the most common type, making up **{pct}%** "
-            f"of all campsites ({top_count} of {len(df)}). This reflects how "
-            f"DOC prioritises accessible, low-cost camping over premium serviced sites."
-        )
-    elif group_by == "Region":
-        return (
-            f"**{top_label}** has the most DOC campsites of any region, with "
-            f"**{top_count}** sites — {pct}% of the national total. This likely "
-            f"reflects both land availability and visitor demand in the area."
-        )
-    elif group_by == "Primary activity":
-        return (
-            f"**{top_label}** is the most commonly listed primary activity, "
-            f"appearing at **{top_count}** campsites ({pct}% of sites with "
-            f"listed activities). Note: many sites offer multiple activities — "
-            f"this shows only the first one listed in the dataset."
-        )
-    elif group_by == "Primary landscape":
-        return (
-            f"**{top_label}** is the most common landscape type, found at "
-            f"**{top_count}** campsites ({pct}% of sites). New Zealand's DOC "
-            f"network is shaped heavily by its coastline and river systems, "
-            f"which this distribution reflects."
-        )
-    return ""
+    return INSIGHT_TEMPLATES[group_by].format(
+        label=top_label, count=top_count, pct=pct, total=len(df)
+    )
 
 
 map_col, legend_col = st.columns([5, 1])
