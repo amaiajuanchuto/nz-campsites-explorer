@@ -25,20 +25,25 @@ INSIGHT_TEMPLATES = {
     ),
 }
 
-EXCLUDED_LABELS = {"Not specified", "Unknown"}
+EXCLUDED_LABELS = {"Not specified", "Unknown"]
+NOT_INSIGHT_MESSAGE = (
+    "We don't have insights for this grouping yet, "
+    "but explore the map to discover patterns in the data!"
+)
+NOT_ENOUGH_DATA_MESSAGE = "Not enough labelled data available for this grouping yet..."
 
 
 def generate_insight(df, group_by):
     """Generate a short text insight based on the current grouping."""
     if group_by not in INSIGHT_TEMPLATES:
-        return ""
+        return NOT_INSIGHT_MESSAGE
 
     counts = df[group_by].value_counts()
     # Exclude placeholder labels so the insight reflects real data, not gaps
     counts = counts[~counts.index.isin(EXCLUDED_LABELS)]
 
     if counts.empty:
-        return "Not enough labelled data available for this grouping yet..."
+        return NOT_ENOUGH_DATA_MESSAGE
 
     top_label = counts.index[0]
     top_count = counts.iloc[0]
