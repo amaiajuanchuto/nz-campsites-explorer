@@ -25,13 +25,10 @@ def extract_primary_value(value, fallback_label):
     return value.split(",")[0].strip()
 
 
-def add_primary_columns(df):
-    """Add single-value columns derived from comma-separated fields."""
-    df["Primary activity"] = df["Activities"].apply(
-        lambda x: extract_primary_value(x, "Not specified")
-    )
-    df["Primary landscape"] = df["Landscape type"].apply(
-        lambda x: extract_primary_value(x, "Unknown")
+def add_primary_column(df, source_col, primary_col, fallback_label="Unknown"):
+    """Add single value columns derived from multi values field."""
+    df[primary_col] = df[source_col].apply(
+        lambda x: extract_primary_value(x, fallback_label)
     )
     return df
 
@@ -48,6 +45,9 @@ def load_and_clean_campsites(filepath="data/campsites.csv"):
     df = pd.read_csv(filepath)
     df = clean_columns(df)
     df = fill_missing_values(df)
-    df = add_primary_columns(df)
+    df = add_primary_column(df, source_col="Activities", primary_col="Primary activity")
+    df = add_primary_column(
+        df, source_col="Landscape type", primary_col="Primary landscape"
+    )
     df = convert_coordinates(df)
     return df
