@@ -25,7 +25,7 @@ INSIGHT_TEMPLATES = {
     ),
 }
 
-EXCLUDED_LABELS = {"Not specified", "Unknown"]
+EXCLUDED_LABELS = ["Unknown"]
 NOT_INSIGHT_MESSAGE = (
     "We don't have insights for this grouping yet, "
     "but explore the map to discover patterns in the data!"

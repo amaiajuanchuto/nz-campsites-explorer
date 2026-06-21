@@ -13,7 +13,7 @@ def clean_columns(df):
 def fill_missing_values(df):
     """Replace nulls in key categorical columns with explicit labels."""
     df["Landscape type"] = df["Landscape type"].fillna("Unknown")
-    df["Activities"] = df["Activities"].fillna("Not specified")
+    df["Activities"] = df["Activities"].fillna("Unknown")
     df["Dogs alllowed"] = df["Dogs alllowed"].fillna("Unknown")
     return df
 
